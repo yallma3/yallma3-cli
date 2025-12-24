@@ -1,47 +1,34 @@
 {
   "name": "yallma3-cli",
   "version": "1.0.0",
-  "description": "AI Agent Development Environment - CLI & TUI",
+  "description": "AI Agent Development Environment - Terminal UI",
   "type": "module",
   "bin": {
-    "yallma3": "./dist/index.js",
-    "yallma3-tui": "./dist/index-tui.js"
+    "yallma3": "./dist/index-tui.js"
   },
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "dev:tui": "tsx src/index-tui.tsx",
-    "build": "tsc && chmod +x dist/index.js dist/index-tui.js",
-    "start": "node dist/index.js",
-    "start:tui": "node dist/index-tui.js",
-    "test": "vitest",
+    "dev": "tsx src/index-tui.tsx",
+    "build": "tsc && chmod +x dist/index-tui.js",
+    "start": "node dist/index-tui.js",
+    "clean": "rm -rf dist",
     "lint": "eslint src",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
-    "boxen": "^7.1.1",
     "chalk": "^5.3.0",
-    "cli-table3": "^0.6.3",
-    "commander": "^11.1.0",
     "crypto-js": "^4.2.0",
-    "date-fns": "^2.30.0",
-    "figlet": "^1.7.0",
-    "gradient-string": "^2.0.2",
     "ink": "^4.4.1",
     "ink-select-input": "^5.0.0",
     "ink-spinner": "^5.0.0",
     "ink-text-input": "^5.0.1",
-    "inquirer": "^9.2.12",
     "meow": "^13.0.0",
-    "ora": "^7.0.1",
     "react": "^18.2.0",
     "uuid": "^9.0.1",
     "ws": "^8.14.2"
   },
   "devDependencies": {
-    "@types/figlet": "^1.5.8",
-    "@types/gradient-string": "^1.1.5",
-    "@types/inquirer": "^9.0.7",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.45",
     "@types/uuid": "^9.0.7",
@@ -49,8 +36,7 @@
     "eslint": "^8.56.0",
     "prettier": "^3.1.1",
     "tsx": "^4.7.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.0.4"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=18.0.0"
