@@ -1,4 +1,3 @@
-// src/tui/components/env-manager.tsx - Environment variables management UI
 import React, { useState } from 'react';
 import { Box, Text, useInput, Newline } from 'ink';
 import TextInput from 'ink-text-input';
@@ -27,7 +26,6 @@ export const EnvManager: React.FC<EnvManagerProps> = ({
 		sensitive: true
 	});
 
-	// Single input handler for ESC + toggle
 	useInput((input, key) => {
 		if (key.escape) {
 			if (step === 'list') onClose();

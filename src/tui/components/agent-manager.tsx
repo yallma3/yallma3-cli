@@ -1,4 +1,3 @@
-// src/tui/components/agent-manager.tsx - REPLACE THIS FILE
 import React, { useState } from 'react';
 import { Box, Text, useInput, Newline } from 'ink';
 import TextInput from 'ink-text-input';

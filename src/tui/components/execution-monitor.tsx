@@ -1,4 +1,3 @@
-// src/tui/components/execution-monitor.tsx - Studio themed execution monitor
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
@@ -41,7 +40,6 @@ export const ExecutionMonitor: React.FC<ExecutionMonitorProps> = ({ ws, workspac
       if (!paused) {
         setMessages(prev => {
           const newMessages = [...prev, event];
-          // Keep last 100 messages
           return newMessages.slice(-100);
         });
 
@@ -88,7 +86,6 @@ export const ExecutionMonitor: React.FC<ExecutionMonitorProps> = ({ ws, workspac
         endTime: null,
       });
     } else if (input === 'f') {
-      // Cycle through filters: null -> error -> warning -> success -> null
       const filters = [null, 'error', 'warning', 'success'];
       const currentIndex = filters.indexOf(filterType);
       const nextIndex = (currentIndex + 1) % filters.length;
@@ -245,7 +242,6 @@ export const ExecutionMonitor: React.FC<ExecutionMonitorProps> = ({ ws, workspac
   );
 };
 
-// Progress Bar Component with Studio colors
 interface ProgressBarProps {
   value: number;
   max: number;
@@ -274,7 +270,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   );
 };
 
-// Live Chart Component with Studio colors
 interface LiveChartProps {
   data: number[];
   height?: number;

@@ -1,4 +1,3 @@
-// src/tui/components/password-input.tsx - NEW FILE
 import React, { useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 
@@ -27,7 +26,6 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
     } else if (key.ctrl && input === 'c') {
       onCancel();
     } else if (input && !key.ctrl && !key.meta && input.length === 1) {
-      // Only accept single printable characters
       const charCode = input.charCodeAt(0);
       if (charCode >= 32 && charCode <= 126) {
         setPassword(prev => prev + input);

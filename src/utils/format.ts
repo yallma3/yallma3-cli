@@ -1,4 +1,3 @@
-// src/utils/format.ts - Formatting utilities
 import { formatDistanceToNow } from 'date-fns';
 
 export function formatTimestamp(timestamp: number): string {

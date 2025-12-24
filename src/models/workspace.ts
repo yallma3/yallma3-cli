@@ -1,5 +1,16 @@
 import { LLMOption } from './llm.js';
 
+export interface CanvasState {
+  nodes: any[];
+  connections?: any;
+  viewport?: {
+    x: number;
+    y: number;
+    zoom: number;
+  };
+  [key: string]: any;
+}
+
 export interface Position {
   x: number;
   y: number;
@@ -53,6 +64,7 @@ export interface WorkflowRef {
   id: string;
   name: string;
   description?: string;
+  canvasState: CanvasState;
 }
 
 export interface EnvironmentVariable {

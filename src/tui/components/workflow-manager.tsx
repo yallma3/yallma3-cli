@@ -1,216 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { Box, Text, useInput } from 'ink';
-// import Spinner from 'ink-spinner';
-
-// import fs from 'fs';
-// import path from 'path';
-
-// import { Paths } from '../../config/paths.js';
-// import { WorkspaceStorage } from '../../storage/workspace.js';
-// import { WorkspaceData } from '../../models/workspace.js';
-
-// interface WorkflowManagerProps {
-//   workspaceId: string;
-//   onClose: () => void;
-// }
-
-// interface WorkflowDetails {
-//   id: string;
-//   name: string;
-//   description?: string;
-//   nodes: number;
-//   connections: number;
-// }
-
-// export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
-//   workspaceId,
-//   onClose,
-// }) => {
-//   const [workspace, setWorkspace] = useState<WorkspaceData | null>(null);
-//   const [workflowDetails, setWorkflowDetails] = useState<WorkflowDetails[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     void loadWorkspace();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
-
-//   const loadWorkflowDetails = async (
-//     workflowRefs: Array<{ id: string; name: string; description?: string }>
-//   ): Promise<WorkflowDetails[]> => {
-//     const flowsDir = Paths.getWorkflowsDir();
-//     const details: WorkflowDetails[] = [];
-
-//     for (const ref of workflowRefs) {
-//       try {
-//         const flowPath = path.join(flowsDir, `${ref.id}.json`);
-
-//         if (fs.existsSync(flowPath)) {
-//           const content = fs.readFileSync(flowPath, 'utf-8');
-//           const workflow = JSON.parse(content);
-
-//           details.push({
-//             id: ref.id,
-//             name: ref.name,
-//             description: ref.description,
-//             nodes: workflow.canvasState?.nodes?.length ?? 0,
-//             connections: workflow.canvasState?.connections?.length ?? 0,
-//           });
-//         } else {
-//           details.push({
-//             id: ref.id,
-//             name: ref.name,
-//             description: ref.description,
-//             nodes: 0,
-//             connections: 0,
-//           });
-//         }
-//       } catch (err) {
-//         // Keep going; show what can be loaded
-//         console.error(`Failed to load workflow ${ref.id}:`, err);
-//       }
-//     }
-
-//     return details;
-//   };
-
-//   const loadWorkspace = async () => {
-//     setLoading(true);
-//     setError(null);
-
-//     try {
-//       const ws = WorkspaceStorage.load(workspaceId);
-//       setWorkspace(ws);
-
-//       const details = await loadWorkflowDetails(ws.workflows ?? []);
-//       setWorkflowDetails(details);
-//     } catch (err: any) {
-//       setError(err?.message || 'Failed to load workspace');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useInput((_, key) => {
-//     if (key.escape) onClose();
-//   });
-
-//   if (loading) {
-//     return (
-//       <Box>
-//         <Text color="#f4c430">
-//           <Spinner type="dots" />
-//         </Text>
-//         <Text color="#888888"> Loading workflows...</Text>
-//       </Box>
-//     );
-//   }
-
-//   if (error) {
-//     return (
-//       <Box flexDirection="column" paddingX={2}>
-//         <Box marginBottom={1}>
-//           <Text bold color="#ef4444">
-//             Error Loading Workflows
-//           </Text>
-//         </Box>
-//         <Box borderStyle="round" borderColor="#ef4444" padding={1}>
-//           <Text color="#ef4444">{error}</Text>
-//         </Box>
-//         <Box marginTop={2}>
-//           <Text color="#888888">ESC: Close</Text>
-//         </Box>
-//       </Box>
-//     );
-//   }
-
-//   if (!workspace) {
-//     return (
-//       <Box flexDirection="column" paddingX={2}>
-//         <Text color="#888888">Workspace not found</Text>
-//         <Box marginTop={2}>
-//           <Text color="#888888">ESC: Close</Text>
-//         </Box>
-//       </Box>
-//     );
-//   }
-
-//   return (
-//     <Box flexDirection="column" paddingX={2}>
-//       <Box marginBottom={1}>
-//         <Text bold color="#f4c430">
-//           Tools & AI Workflows
-//         </Text>
-//       </Box>
-
-//       <Box marginBottom={1}>
-//         <Text color="#888888">Total: {workflowDetails.length} workflows</Text>
-//       </Box>
-
-//       {workflowDetails.length === 0 ? (
-//         <Box
-//           borderStyle="round"
-//           borderColor="#3a3a3a"
-//           padding={1}
-//           flexDirection="column"
-//         >
-//           <Text color="#888888">No workflows in this workspace yet.</Text>
-//           <Box marginTop={1}>
-//             <Text color="#fbbf24">
-//               Import workflows from the Studio application.
-//             </Text>
-//           </Box>
-//           <Box marginTop={1}>
-//             <Text color="#888888">
-//               Workflows are stored in: ~/.yallma3/flows/
-//             </Text>
-//           </Box>
-//         </Box>
-//       ) : (
-//         <Box
-//           borderStyle="round"
-//           borderColor="#3a3a3a"
-//           padding={1}
-//           flexDirection="column"
-//         >
-//           {workflowDetails.map((wf, i) => (
-//             <Box
-//               key={wf.id}
-//               marginBottom={i < workflowDetails.length - 1 ? 1 : 0}
-//               flexDirection="column"
-//             >
-//               <Box>
-//                 <Text color="#60a5fa">{i + 1}. </Text>
-//                 <Text bold color="#e0e0e0">
-//                   {wf.name}
-//                 </Text>
-//               </Box>
-
-//               {wf.description && (
-//                 <Box marginLeft={3}>
-//                   <Text color="#888888">{wf.description}</Text>
-//                 </Box>
-//               )}
-
-//               <Box marginLeft={3}>
-//                 <Text color="#888888">
-//                   ID: {wf.id.substring(0, 12)} | Nodes: {wf.nodes} | Connections:{' '}
-//                   {wf.connections}
-//                 </Text>
-//               </Box>
-//             </Box>
-//           ))}
-//         </Box>
-//       )}
-
-//       <Box marginTop={2}>
-//         <Text color="#888888">ESC: Close</Text>
-//       </Box>
-//     </Box>
-//   );
-// };
-// src/tui/components/workflow-manager.tsx - FIXED VERSION
 import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput } from 'ink';
 import Spinner from 'ink-spinner';
@@ -222,7 +9,7 @@ import { Paths } from '../../config/paths.js';
 import { WorkspaceData } from '../../models/workspace.js';
 
 interface WorkflowManagerProps {
-  workspace: WorkspaceData; // Changed from workspaceId to workspace
+  workspace: WorkspaceData; 
   onClose: () => void;
 }
 
@@ -247,7 +34,6 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
 
   useEffect(() => {
     void loadWorkflowDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace]);
 
   const loadAllAvailableWorkflows = (): string[] => {
@@ -292,7 +78,6 @@ export const WorkflowManager: React.FC<WorkflowManagerProps> = ({
             filePath: flowPath,
           });
         } else {
-          // Workflow referenced but file doesn't exist
           details.push({
             id: ref.id,
             name: ref.name,
